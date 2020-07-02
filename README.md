@@ -1,4 +1,10 @@
 # ClientSideDemo
-This is a demo for JS app. It could only login the Oauth and use file api to show files.
+This is a demo for JS app. Now it could login the google auth and get metadata of all of the files in the user's drive.
 
-After started, use the browser to access 127.0.0.1/auth to try it out.
+
+After started, use the browser to access 127.0.0.1/authGapi to try it out.
+
+You should open the console of the browser first(for some of the output are given by console.log)
+
+Then click the authorize button to deal with the Oauth login, then the browser side will show the names and id of files,
+the console will show some debugging data and finally show the time cost of retrieving those data.  

@@ -13,6 +13,7 @@
 
     <pre id="content" style="white-space: pre-wrap;"></pre>
     <script src="{{ url_for('static',filename='node_modules/localforage/dist/localforage.js') }}"></script>>
+    <!--this app used localforage to store data in a browser-->
     <script type="text/javascript">
       // Client ID and API key from the Developer Console
       console.log('localforage is: ', localforage);
@@ -68,7 +69,7 @@
           authorizeButton.style.display = 'none';
           signoutButton.style.display = 'block';
           waitToGetFiles();
-            //some syncronizing problem
+            //some syncronizing problem here
 
         } else {
           authorizeButton.style.display = 'block';
@@ -79,8 +80,9 @@
       function waitToGetFiles(){
 
           var newFiles=[];
+          appendPre('Files:');
           console.time('all time');
-
+          //used to calculate the time consumed
           listAllFiles(null,newFiles);
 
 
@@ -117,6 +119,7 @@
        * Print files.
        */
       function listFiles() {
+          //this function is never used now, forget about it
         gapi.client.drive.files.list({
           'pageSize': 1000,
           'fields': "nextPageToken, files(id, name,kind,size,webContentLink,shared,parents,ownedByMe)"
@@ -146,23 +149,27 @@
           'fields': "nextPageToken, files(id, name,kind,size,webContentLink,shared,parents,ownedByMe,createdTime,modifiedTime,modifiedByMeTime,fileExtension,mimeType,imageMediaMetadata,videoMediaMetadata)"
             //'fields': "*"
         }).then(function(response) {
-          appendPre('Files:');
+
           var files = response.result.files;
             hasNext = response.result.nextPageToken;
+            //get the nextPageToken
           console.log("has next?");
           console.log(hasNext);
+          //for testing
           if (files && files.length > 0) {
             for (var i = 0; i < files.length; i++) {
               var file = files[i];
               newFiles.push(file);
+              appendPre(file.name + ' (' + file.id + ')');
+              //pushing some of the metadata of files into the list
             }
             //console.log(newFiles)
               if(hasNext){
               listAllFiles(hasNext,newFiles);
               }else{
                   console.log(newFiles);
-                saveMetaData(newFiles);
-
+                  saveMetaData(newFiles);
+                  //this function is used to save data in browser side
               }
               return newFiles;
 
@@ -179,7 +186,7 @@
 
 
 
-            console.log(newList)
+            //console.log(newList)
             localforage.setItem('response', newList).then(function (value) {
                             // saved value
                 console.log("save success")
