@@ -1,0 +1,162 @@
+<html><head></head><body>
+<script src="{{ url_for('static',filename='node_modules/localforage/dist/localforage.js') }}"></script>>
+<script>
+  var YOUR_CLIENT_ID = '697344318458-dqc0g8jigivniq6ajsmnlih7gmscu1rd.apps.googleusercontent.com';
+  var YOUR_REDIRECT_URI = 'http://127.0.0.1:5000/auth';
+  var fragmentString = location.hash.substring(1);
+
+  // Parse query string to see if page request is coming from OAuth 2.0 server.
+  var params = {};
+  var regex = /([^&=]+)=([^&]*)/g, m;
+  while (m = regex.exec(fragmentString)) {
+    params[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
+  }
+  if (Object.keys(params).length > 0) {
+    localStorage.setItem('oauth2-test-params', JSON.stringify(params) );
+    if (params['state'] && params['state'] == 'try_sample_request') {
+      //trySampleRequest();
+    }
+  }
+
+  // If there's an access token, try an API request.
+  // Otherwise, start OAuth 2.0 flow.
+  function trySampleRequest() {
+      console.time('all time');
+    var params = JSON.parse(localStorage.getItem('oauth2-test-params'));
+    if (params && params['access_token']) {
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET',
+          'https://www.googleapis.com/drive/v3/files?' +
+          'access_token=' + params['access_token']+'&fields=*');
+      xhr.onreadystatechange = function (e) {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            console.log(xhr.response);
+
+　　
+        　　
+            saveMetaData(xhr.response);
+
+
+        } else if (xhr.readyState === 4 && xhr.status === 401) {
+          // Token invalid, so prompt for user permission.
+          oauth2SignIn();
+        }
+      };
+      xhr.send(null);
+    } else {
+      oauth2SignIn();
+    }
+
+            console.log("time cost:")
+　　        console.timeEnd('all time');
+  }
+
+  /*
+   * Create form to request access token from Google's OAuth 2.0 server.
+   */
+  function oauth2SignIn() {
+    // Google's OAuth 2.0 endpoint for requesting an access token
+    var oauth2Endpoint = 'https://accounts.google.com/o/oauth2/v2/auth';
+
+    // Create element to open OAuth 2.0 endpoint in new window.
+    var form = document.createElement('form');
+    form.setAttribute('method', 'GET'); // Send as a GET request.
+    form.setAttribute('action', oauth2Endpoint);
+
+    // Parameters to pass to OAuth 2.0 endpoint.
+    var params = {'client_id': YOUR_CLIENT_ID,
+                  'redirect_uri': YOUR_REDIRECT_URI,
+                  'scope': 'https://www.googleapis.com/auth/drive.metadata.readonly',
+                  'state': 'try_sample_request',
+                  'include_granted_scopes': 'true',
+                  'response_type': 'token'};
+
+    // Add form parameters as hidden input values.
+    for (var p in params) {
+      var input = document.createElement('input');
+      input.setAttribute('type', 'hidden');
+      input.setAttribute('name', p);
+      input.setAttribute('value', params[p]);
+      form.appendChild(input);
+    }
+
+    // Add form to page and submit it to open the OAuth 2.0 endpoint.
+    document.body.appendChild(form);
+    form.submit();
+  }
+
+  function saveMetaData(MetaResponse){
+
+
+            var originalObject = eval("(" + MetaResponse + ")")
+            var originalList = originalObject["files"]
+
+            var newList = []
+      //choose what to store here
+            for(var index in originalList){
+                var file = new Object()
+                var tempObj = originalList[index]
+                file['id'] = tempObj['id']
+                file['kind']=tempObj['kind']
+
+                //what is turk ID?
+                //what's the difference of ID& rand ID
+
+                file['name'] = tempObj['name']
+                //the name of file
+                file['size'] = tempObj['size']
+                //total size of file
+                file['webContentLink'] = tempObj['webContentLink']
+                //the link to access web content
+
+                //what is path? web content link?
+
+                file['shared'] = tempObj['shared']
+                //whether it is shared
+
+                file['parents']=tempObj['parents']
+                //the parents of this file(is a list)
+                file['ownedByMe'] = tempObj['ownedByMe']
+                //whether owned by me
+                file['mediaInfo']=null
+                if('imageMediaMetadata' in tempObj){
+                    file['mediaInfo']=tempObj['imageMediaMetadata']
+                }
+                if('videoMediaMetadata' in tempObj){
+                    file['mediaInfo']=tempObj['videoMediaMetadata']
+                }
+                //if it is image or video it should store an object
+                file['createdTime']=tempObj['createdTime']
+
+                file['modifiedTime']=tempObj['modifiedTime']
+                //the time when file was last modified
+                file['modifiedByMeTime']=tempObj['modifiedByMeTime']
+                //the time when file was last modified by owner
+                file['fileExtension']=tempObj['fileExtension']
+                //the extension of file
+                file['mimeType']=tempObj['mimeType']
+                newList.push(file)
+            }
+
+            console.log(newList)
+            localforage.setItem('response', newList).then(function (value) {
+                            // saved value
+                console.log("save success")
+                console.log(value);
+            }).catch(function(err) {
+
+            console.log(err);
+            });
+            localforage.getItem('response').then(function(values){
+                console.log("Get Success")
+                console.log(values);
+            }).catch(function (err) {
+                console.log(err);
+            })
+  }
+
+
+</script>
+
+<button onclick="trySampleRequest();">Try api request</button>
+</body></html>
