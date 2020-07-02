@@ -2,11 +2,8 @@ from app import  app
 from flask import render_template,escape, url_for
 
 
-@app.route('/')
-def index():
-    user={'name':'qaq'}
-    return render_template('index.html',user=user)
-#it's just a test for flask, ignore that
+
+
 
 @app.route('/auth')
 def authorization():
