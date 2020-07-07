@@ -17,6 +17,9 @@
     <script type="text/javascript">
       // Client ID and API key from the Developer Console
       console.log('localforage is: ', localforage);
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('service-worker.js');
+      }
       var CLIENT_ID = '697344318458-dqc0g8jigivniq6ajsmnlih7gmscu1rd.apps.googleusercontent.com';
       var API_KEY = 'AIzaSyCG8xfIDXOdkCq1aUJ4jzNI6qaLVq_T-sw';
 
