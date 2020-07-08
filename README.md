@@ -1,5 +1,6 @@
 # ClientSideDemo
-This is a demo for JS app. Now it could login the google auth and get metadata of all of the files in the user's drive.
+This is a current runnable demo for JS app. Now it could login the google auth and get metadata of all of the files in the user's drive. 
+The service worker version is not finished yet.
 
 
 After started, use the browser to access 127.0.0.1/authGapi to try it out.

@@ -22,6 +22,10 @@ def authorizationJS():
 def authorizationGapi():
     return render_template('googleAuthGapi.html')
 
+@app.route('/authGapiService')
+def authorizationGapiService():
+    return render_template('googleAuthGapiService.html')
+
 
 @app.route('/user/<username>')
 def show_user_profile(username):

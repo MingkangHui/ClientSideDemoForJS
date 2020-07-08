@@ -12,22 +12,13 @@
     <button id="signout_button" style="display: none;">Sign Out</button>
 
     <pre id="content" style="white-space: pre-wrap;"></pre>
+    <script src = >
     <script src="{{ url_for('static',filename='node_modules/localforage/dist/localforage.js') }}"></script>>
     <!--this app used localforage to store data in a browser-->
     <script type="text/javascript">
       // Client ID and API key from the Developer Console
       console.log('localforage is: ', localforage);
 
-
-    if ('serviceWorker' in window.navigator) {
-      navigator.serviceWorker.register( url_for('static',filename='sw.js'), { scope: './' })
-        .then(function (reg) {
-          console.log('success', reg);
-        })
-        .catch(function (err) {
-          console.log('fail', err);
-        });
-    }
 
 
 
