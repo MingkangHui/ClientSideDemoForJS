@@ -2,7 +2,9 @@ from app import  app
 from flask import render_template,escape, url_for
 
 
-
+@app.route('/sw.js', methods=['GET'])
+def sw():
+    return app.send_static_file('sw.js')
 
 
 @app.route('/auth')

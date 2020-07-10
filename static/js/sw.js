@@ -1,4 +1,5 @@
-//service worker has a pretty strange lifecycle, still finding way to deal with frequent installation
+//service worker has a pretty strange lifecycle, still finding way to deal with frequent installation, later we need to
+//change some of the functions to promise to fit the service worker.
 
 
 
