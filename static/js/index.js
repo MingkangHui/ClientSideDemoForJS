@@ -234,13 +234,13 @@ function run() {
 
     if ('serviceWorker' in navigator) {
         console.log("in navi");
-        window.addEventListener('load', function() {
+        //deleted an onload here, since there's already one in the html
         navigator.serviceWorker.register('static/js/sw.js').then(function(registration){
         console.log("Registration complete for ",registration.scope);
     },function(err){
         console.log("Error ",err);
     });
-  });
+
 }
 
 
