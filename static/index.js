@@ -24,9 +24,40 @@
       var authorizeButton = document.getElementById('authorize_button');
       var signoutButton = document.getElementById('signout_button');
 
+
+      var hasNext = null
+   //here's the global variable hasNext to test whether the work is finished.
       /**
        *  On load, called to load the auth2 library and API client library.
        */
+
+      var obj = {}
+            Object.defineProperty(obj,'hasNext',{
+                get:function(){
+                    return hasNext
+                },
+                set:function(value){
+                    hasNext = value;
+                    if(hasNext == 'finished'){
+                        console.log("It is finally finished now")
+                    }
+                }
+            })
+
+
+   function sendMsg(msg) {
+    const controller = navigator.serviceWorker.controller;
+    console.log(controller);
+    if (!controller) {
+        return;
+    }
+
+    controller.postMessage(msg, []);
+}
+
+
+
+
       function handleClientLoad() {
         gapi.load('client:auth2', initClient);
       }
@@ -68,11 +99,23 @@
           run();
 
 
+          // promise1 = new Promise(function (resolve) {
+          //     //waitToGetFiles();
+          //     if(hasNext=="finished"){
+          //         resolve("success")
+          //     }
+          //
+          // })
+          //   promise1.then(function(value){
+          //       console.log("loading success")
+          //   })
+
+
 
 
 
             //here's the damn annotation!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-          //waitToGetFiles();
+
             //some syncronizing problem here
 
         } else {
@@ -145,7 +188,7 @@
 
 
       function listAllFiles(pageToken,newFiles) {
-          var hasNext = null
+        hasNext = null
 
         gapi.client.drive.files.list({
           'pageSize': 100,
@@ -156,6 +199,7 @@
 
           var files = response.result.files;
             hasNext = response.result.nextPageToken;
+            obj.hasNext = response.result.nextPageToken;
             //get the nextPageToken
           console.log("has next?");
           console.log(hasNext);
@@ -172,14 +216,23 @@
               listAllFiles(hasNext,newFiles);
               }else{
                   console.log(newFiles);
+                  hasNext = "finished"
+                  obj.hasNext = "finished"
                   saveMetaData(newFiles);
                   //this function is used to save data in browser side
+              }
+              if(hasNext=="finished"){
+                  console.log("in wait success")
+
               }
               return newFiles;
 
           } else {
             appendPre('No files found.');
+
           }
+
+
         });
 
 
@@ -212,7 +265,7 @@
 
 
 
-
+//this function is for testing the service worker
 
 function run() {
     console.log("Test2");
@@ -231,25 +284,45 @@ function run() {
     //     console.log("fuck")
     // }
 
-
+    //here's a bad fetch
     if ('serviceWorker' in navigator) {
         console.log("in navi");
-        //deleted an onload here, since there's already one in the html
-        navigator.serviceWorker.register('static/js/sw.js').then(function(registration){
-        console.log("Registration complete for ",registration.scope);
-    },function(err){
-        console.log("Error ",err);
-    });
+        //actually there should be a onload here but there's already one in html so I skip it, gotta add it on later
+            console.log("in regis")
+            var domain = document.domain;
+            //console.log(domain)
+        navigator.serviceWorker.register('/sw.js', {scope: '/'}).then(function(registration){
 
+        console.log("Registration complete for ",registration.scope);
+        //sendMsg(document);
+    },function(err){
+        console.log(err);
+    });
+  ;
 }
+
+
+    // if (navigator.serviceWorker) {
+    //     navigator.serviceWorker.getRegistrations().then(function (regs) {
+    //         console.log("Enter")
+    //         console.log(regs)
+    //         for (var reg of regs) {
+    //             console.log(reg.scope)
+    //             if (reg.scope === 'http://localhost:5000/static/sw.js') {
+    //                 reg.unregister();
+    //
+    //         }
+    //         // renew service worker and register for a new one
+    //         navigator.serviceWorker.register('/static/sw.js').then(function (reg) {
+    //             console.log("success")
+    //         });
+    //     }})
+    // }
+
 
 
     console.log("Finished?")
 
 }
-
-
-
-
 
 
