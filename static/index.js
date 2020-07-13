@@ -291,7 +291,7 @@ function run() {
             console.log("in regis")
             var domain = document.domain;
             //console.log(domain)
-        navigator.serviceWorker.register('/sw.js', {scope: '/'}).then(function(registration){
+        navigator.serviceWorker.register('static/sw.js').then(function(registration){
 
         console.log("Registration complete for ",registration.scope);
         //sendMsg(document);
