@@ -97,7 +97,7 @@
 
 
           run();
-
+          waitToGetFiles();
 
           // promise1 = new Promise(function (resolve) {
           //     //waitToGetFiles();
