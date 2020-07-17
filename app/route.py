@@ -29,6 +29,11 @@ def authorizationGapiService():
     return render_template('googleAuthGapiService.html')
 
 
+@app.route('/authGapiWeb')
+def authorizationGapiService():
+    return render_template('googleAuthGapiWeb.html')
+
+
 @app.route('/user/<username>')
 def show_user_profile(username):
     # show the user profile for that user
