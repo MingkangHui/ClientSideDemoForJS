@@ -6,6 +6,10 @@ from flask import render_template,escape, url_for
 def sw():
     return app.send_static_file('sw.js')
 
+@app.route('/worker.js', methods=['GET'])
+def worker():
+    return app.send_static_file('worker.js')
+
 
 @app.route('/auth')
 def authorization():
@@ -30,7 +34,7 @@ def authorizationGapiService():
 
 
 @app.route('/authGapiWeb')
-def authorizationGapiService():
+def authorizationGapiWeb():
     return render_template('googleAuthGapiWeb.html')
 
 
