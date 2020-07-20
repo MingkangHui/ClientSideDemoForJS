@@ -1,7 +1,6 @@
-   const script = document.createElement('script');
-        script.src = 'https://apis.google.com/js/api.js';
-        script.language = 'JavaScript';
-        document.body.appendChild(script);
+
+
+
 
 
 
@@ -12,7 +11,7 @@
     worker.onmessage = function (event) {
       console.log('Received message ' + event.data);
     }
-
+    //here to start a web worker.
 
 
 
@@ -68,7 +67,8 @@
 
 
       function handleClientLoad() {
-        gapi.load('client:auth2', initClient);
+        //gapi.load('client:auth2', initClient);
+          //annotation here to stop the damn flow
       }
 
       /**
@@ -274,64 +274,6 @@
 
 
 
-//this function is for testing the service worker
 
-function run() {
-    console.log("Test2");
-
-    // if ('serviceWorker' in navigator) {
-    //   window.addEventListener('load', function() {
-    //     navigator.serviceWorker.register('/sw.js').then(function(registration) {
-    //       // Registration was successful
-    //       console.log('ServiceWorker registration successful with scope: ', registration.scope);
-    //     }, function(err) {
-    //       // registration failed :(
-    //       console.log('ServiceWorker registration failed: ', err);
-    //     });
-    //   });
-    // }else{
-    //     console.log("fuck")
-    // }
-
-    //here's a bad fetch
-    if ('serviceWorker' in navigator) {
-        console.log("in navi");
-        //actually there should be a onload here but there's already one in html so I skip it, gotta add it on later
-            console.log("in regis")
-            var domain = document.domain;
-            //console.log(domain)
-        navigator.serviceWorker.register('static/sw.js').then(function(registration){
-
-        console.log("Registration complete for ",registration.scope);
-        //sendMsg(document);
-    },function(err){
-        console.log(err);
-    });
-  ;
-}
-
-
-    // if (navigator.serviceWorker) {
-    //     navigator.serviceWorker.getRegistrations().then(function (regs) {
-    //         console.log("Enter")
-    //         console.log(regs)
-    //         for (var reg of regs) {
-    //             console.log(reg.scope)
-    //             if (reg.scope === 'http://localhost:5000/static/sw.js') {
-    //                 reg.unregister();
-    //
-    //         }
-    //         // renew service worker and register for a new one
-    //         navigator.serviceWorker.register('/static/sw.js').then(function (reg) {
-    //             console.log("success")
-    //         });
-    //     }})
-    // }
-
-
-
-    console.log("Finished?")
-
-}
 
 
