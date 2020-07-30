@@ -1,5 +1,6 @@
 //tried to move some of the functions here, but since sw can't receive api as message, it's a lot harder than I've thought before,
 //currently I'm still looking for a way to send the api or a login token(but I don't know where to find one) in here.
+// now maybe we should do the python end first(using glue codes)
 
 self.addEventListener('install', function(event) {
   console.log("Installed")
